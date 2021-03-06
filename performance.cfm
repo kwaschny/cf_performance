@@ -1,10 +1,12 @@
-<cfsetting enableCFoutputOnly="true">
+﻿<cfsetting enableCFoutputOnly="true">
 
 <cfif (not structKeyExists(VARIABLES, "THISTAG")) or (not THISTAG.hasEndTag)>
 	<cfexit>
 </cfif>
 
 <!--- BEGIN: attributes --->
+
+	<cfparam name="ATTRIBUTES.type" 		type="string" 	default="dump"> <!--- "dump", "inline", "outline", "comment" --->
 
 	<cfparam name="ATTRIBUTES.label" 		type="string" 	default="PERFORMANCE">
 	<cfparam name="ATTRIBUTES.abort" 		type="boolean" 	default="false">
@@ -39,13 +41,13 @@
 	<cfif not len(ATTRIBUTES.returnType)>
 
 		<cfif ATTRIBUTES.nano>
-			<cfif LOCAL.final gt 10000000000>
+			<cfif LOCAL.final gte 10000000000>
 				<cfset ATTRIBUTES.returnType = "s">
 			<cfelse>
 				<cfset ATTRIBUTES.returnType = "ms">
 			</cfif>
 		<cfelse>
-			<cfif LOCAL.final gt 10000>
+			<cfif LOCAL.final gte 10000>
 				<cfset ATTRIBUTES.returnType = "s">
 			<cfelse>
 				<cfset ATTRIBUTES.returnType = "ms">
@@ -99,7 +101,29 @@
 		<cfset CALLER[ATTRIBUTES.variable] = PERFORMANCE["Result"]>
 
 	<cfelse>
-		<cfdump label="#ATTRIBUTES.label#" var="#PERFORMANCE#" abort="#ATTRIBUTES.abort#">
+
+		<cfswitch expression="#ATTRIBUTES.type#">
+
+			<cfcase value="inline">
+				<cfoutput>#( len(ATTRIBUTES.label) ? (encodeForHtml(ATTRIBUTES.label) & " ") : "" )##PERFORMANCE["Result"]#</cfoutput>
+			</cfcase>
+
+			<cfcase value="outline">
+				<cfoutput><fieldset><cfif len(ATTRIBUTES.label)><legend>#encodeForHtml(ATTRIBUTES.label)#</legend></cfif>#PERFORMANCE["Result"]#</fieldset></cfoutput>
+			</cfcase>
+
+			<cfcase value="comment">
+				<cfoutput><!-- #( len(ATTRIBUTES.label) ? encodeForHtml(ATTRIBUTES.label) : "" )# #PERFORMANCE["Result"]# --></cfoutput>
+			</cfcase>
+
+			<cfdefaultcase>
+				<cfdump label="#ATTRIBUTES.label#" var="#PERFORMANCE#" abort="#ATTRIBUTES.abort#">
+			</cfdefaultcase>
+
+		</cfswitch>
+
 	</cfif>
+
+	<cfif ATTRIBUTES.abort><cfabort></cfif>
 
 </cfif>

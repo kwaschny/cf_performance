@@ -58,6 +58,15 @@ If you don't want to immediately dump the result, you can store it in a variable
 
 ![](screenshots/variable.png)
 
+### `type`
+
+- `dump`: dumps the result as struct
+- `inline`: outputs the result as string
+- `outline`: outputs the result within `<fieldset>`
+- `comment`: outputs the result within `<!-- HTML comment -->`
+
+Default type is `dump`.
+
 ### `label`
 
 Label multiple measurements to distinguish between them more easily:
@@ -120,13 +129,6 @@ Renaming `performance.cfm` to `perf.cfm`:
 <cf_perf>
 	<cfset doSomething()>
 </cf_perf>
-```
-
-Renaming `performance.cfm` to `p.cfm`:
-```cfml
-<cf_p>
-	<cfset doSomething()>
-</cf_p>
 ```
 
 ## A note about micro benchmarking
