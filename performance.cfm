@@ -1,6 +1,4 @@
-﻿<cfsetting enableCFoutputOnly="true">
-
-<cfif (not structKeyExists(VARIABLES, "THISTAG")) or (not THISTAG.hasEndTag)>
+﻿<cfif (not structKeyExists(VARIABLES, "THISTAG")) or (not THISTAG.hasEndTag)>
 	<cfexit>
 </cfif>
 

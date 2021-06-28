@@ -1,4 +1,6 @@
-﻿<cfoutput>
+﻿<cfsetting enableCFoutputOnly="true">
+
+<cfoutput>
 
 	<!DOCTYPE html>
 	<style>body { font-family: sans-serif; }</style>
